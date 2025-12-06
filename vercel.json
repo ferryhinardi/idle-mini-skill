@@ -1,0 +1,6 @@
+{
+  "name": "idle-mini-skill",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install"
+}
