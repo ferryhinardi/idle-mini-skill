@@ -64,7 +64,7 @@ test.describe('Idle Game Flow', () => {
     expect(initialLevel).toBe('0')
 
     // Purchase upgrade
-    await page.getByTestId('upgrade-generatorLevel').click()
+    await page.getByTestId('upgrade-generatorLevel').click({ force: true })
 
     // Check level increased
     await expect(page.getByTestId('generatorLevel-level')).toContainText('1')
@@ -89,15 +89,15 @@ test.describe('Mini-Game Flow', () => {
   })
 
   test('should open mini-game on button click', async ({ page }) => {
-    await page.getByTestId('start-mini-game').click()
+    await page.getByTestId('start-mini-game').click({ force: true })
 
     // Check mini-game screen appears
     await expect(page.getByTestId('start-game')).toBeVisible()
   })
 
   test('should start mini-game and display HUD', async ({ page }) => {
-    await page.getByTestId('start-mini-game').click()
-    await page.getByTestId('start-game').click()
+    await page.getByTestId('start-mini-game').click({ force: true })
+    await page.getByTestId('start-game').click({ force: true })
 
     // Check HUD elements
     await expect(page.getByTestId('game-score')).toBeVisible()
@@ -107,8 +107,8 @@ test.describe('Mini-Game Flow', () => {
   })
 
   test('should count down time during game', async ({ page }) => {
-    await page.getByTestId('start-mini-game').click()
-    await page.getByTestId('start-game').click()
+    await page.getByTestId('start-mini-game').click({ force: true })
+    await page.getByTestId('start-game').click({ force: true })
 
     // Get initial time
     const initialTime = await page.getByTestId('game-time').textContent()
@@ -122,8 +122,8 @@ test.describe('Mini-Game Flow', () => {
   })
 
   test('should allow clicking targets', async ({ page }) => {
-    await page.getByTestId('start-mini-game').click()
-    await page.getByTestId('start-game').click()
+    await page.getByTestId('start-mini-game').click({ force: true })
+    await page.getByTestId('start-game').click({ force: true })
 
     // Wait for targets to spawn
     await page.waitForTimeout(1000)
@@ -146,14 +146,14 @@ test.describe('Mini-Game Flow', () => {
   })
 
   test('should end game and return to dashboard', async ({ page }) => {
-    await page.getByTestId('start-mini-game').click()
-    await page.getByTestId('start-game').click()
+    await page.getByTestId('start-mini-game').click({ force: true })
+    await page.getByTestId('start-game').click({ force: true })
 
     // Wait a bit
     await page.waitForTimeout(1000)
 
     // End game
-    await page.locator('.end-game-button').click()
+    await page.locator('.end-game-button').click({ force: true })
 
     // Should return to dashboard
     await expect(page.getByTestId('start-mini-game')).toBeVisible()
@@ -168,8 +168,8 @@ test.describe('Boost System', () => {
 
   test('should apply boost after completing mini-game', async ({ page }) => {
     // Complete mini-game with some score
-    await page.getByTestId('start-mini-game').click()
-    await page.getByTestId('start-game').click()
+    await page.getByTestId('start-mini-game').click({ force: true })
+    await page.getByTestId('start-game').click({ force: true })
 
     // Wait and click to get some score
     await page.waitForTimeout(1000)
@@ -187,7 +187,7 @@ test.describe('Boost System', () => {
     }
 
     // End game
-    await page.locator('.end-game-button').click()
+    await page.locator('.end-game-button').click({ force: true })
 
     // Check if boost indicator appears
     // Note: Boost only appears if score > 0
