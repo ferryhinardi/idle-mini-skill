@@ -8,13 +8,13 @@ const localStorageMock = {
   clear: jest.fn(),
 }
 
-global.localStorage = localStorageMock as any
+global.localStorage = localStorageMock
 
 // Mock requestAnimationFrame
-global.requestAnimationFrame = (cb: FrameRequestCallback) => {
-  return setTimeout(cb, 0) as unknown as number
+global.requestAnimationFrame = (cb) => {
+  return setTimeout(cb, 0)
 }
 
-global.cancelAnimationFrame = (id: number) => {
+global.cancelAnimationFrame = (id) => {
   clearTimeout(id)
 }
