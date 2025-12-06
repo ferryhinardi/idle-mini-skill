@@ -30,6 +30,9 @@ test.describe('Idle Game Flow', () => {
   })
 
   test('should allow purchasing upgrades when affordable', async ({ page }) => {
+    // Navigate to page first, then set localStorage
+    await page.goto('/')
+    
     // Add resources via localStorage with level 1 to verify persistence
     await page.evaluate(() => {
       const state = {
@@ -53,17 +56,18 @@ test.describe('Idle Game Flow', () => {
       localStorage.setItem('idle-mini-skill-game-state', JSON.stringify(state))
     })
 
-    // Reload page
+    // Reload page to apply localStorage
     await page.reload()
 
-    // Wait for resources to be loaded
+    // Wait for resources to be loaded and state to hydrate
     await expect(page.getByTestId('resource-amount')).toBeVisible()
+    await page.waitForTimeout(1000) // Wait for state hydration
 
     // Check generator level persisted from storage
-    await expect(page.getByTestId('generatorLevel-level')).toContainText('3')
+    await expect(page.getByTestId('generatorLevel-level')).toContainText('3', { timeout: 10000 })
     
     // Check multiplier level persisted
-    await expect(page.getByTestId('multiplierLevel-level')).toContainText('1')
+    await expect(page.getByTestId('multiplierLevel-level')).toContainText('1', { timeout: 10000 })
   })
 
   test('should not allow purchasing upgrades when unaffordable', async ({ page }) => {
@@ -194,6 +198,9 @@ test.describe('Boost System', () => {
 
 test.describe('Persistence', () => {
   test('should persist game state across page reloads', async ({ page }) => {
+    // Navigate to page first
+    await page.goto('/')
+    
     // Set initial state with resources
     await page.evaluate(() => {
       const state = {
@@ -217,16 +224,23 @@ test.describe('Persistence', () => {
       localStorage.setItem('idle-mini-skill-game-state', JSON.stringify(state))
     })
 
-    await page.goto('/')
+    // Reload to apply the state
+    await page.reload()
+    
+    // Wait for state hydration
+    await page.waitForTimeout(1000)
 
     // Verify generator level persisted
-    await expect(page.getByTestId('generatorLevel-level')).toContainText('3')
+    await expect(page.getByTestId('generatorLevel-level')).toContainText('3', { timeout: 10000 })
 
     // Verify best score persisted
-    await expect(page.getByTestId('best-score')).toContainText('250')
+    await expect(page.getByTestId('best-score')).toContainText('250', { timeout: 10000 })
   })
 
   test('should calculate offline gains on reload', async ({ page }) => {
+    // Navigate to page first
+    await page.goto('/')
+    
     // Set state with old timestamp
     await page.evaluate(() => {
       const state = {
@@ -250,7 +264,11 @@ test.describe('Persistence', () => {
       localStorage.setItem('idle-mini-skill-game-state', JSON.stringify(state))
     })
 
-    await page.goto('/')
+    // Reload to trigger offline gains calculation
+    await page.reload()
+    
+    // Wait for state hydration
+    await page.waitForTimeout(1000)
 
     // Resources should be more than 1000 due to offline gains
     const resources = await page.getByTestId('resource-amount').textContent()
