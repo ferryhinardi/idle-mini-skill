@@ -22,7 +22,7 @@ test.describe('Idle Game Flow', () => {
     const initialResources = await page.getByTestId('resource-amount').textContent()
 
     // Wait for resources to accumulate
-    await page.waitForTimeout(3000)
+    await page.waitForTimeout(2000)
 
     // Check resources increased
     const currentResources = await page.getByTestId('resource-amount').textContent()
@@ -114,7 +114,7 @@ test.describe('Mini-Game Flow', () => {
     const initialTime = await page.getByTestId('game-time').textContent()
 
     // Wait a bit
-    await page.waitForTimeout(2000)
+    await page.waitForTimeout(1000)
 
     // Check time decreased
     const currentTime = await page.getByTestId('game-time').textContent()
@@ -126,7 +126,7 @@ test.describe('Mini-Game Flow', () => {
     await page.getByTestId('start-game').click()
 
     // Wait for targets to spawn
-    await page.waitForTimeout(1500)
+    await page.waitForTimeout(1000)
 
     // Get initial score
     const initialScore = await page.getByTestId('game-score').textContent()
@@ -138,7 +138,7 @@ test.describe('Mini-Game Flow', () => {
     await canvas.click({ position: { x: 600, y: 400 } })
 
     // Wait a bit for potential score updates
-    await page.waitForTimeout(500)
+    await page.waitForTimeout(300)
 
     // Score should potentially change (if we hit a target)
     const currentScore = await page.getByTestId('game-score').textContent()
@@ -172,18 +172,18 @@ test.describe('Boost System', () => {
     await page.getByTestId('start-game').click()
 
     // Wait and click to get some score
-    await page.waitForTimeout(1500)
+    await page.waitForTimeout(1000)
     const canvas = page.getByTestId('game-canvas')
     
     // Click multiple times to potentially hit targets
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 10; i++) {
       await canvas.click({ 
         position: { 
-          x: 100 + (i * 30), 
-          y: 100 + (i * 20) 
+          x: 100 + (i * 50), 
+          y: 100 + (i * 30) 
         } 
       })
-      await page.waitForTimeout(100)
+      await page.waitForTimeout(50)
     }
 
     // End game
