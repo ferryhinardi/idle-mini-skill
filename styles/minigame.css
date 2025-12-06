@@ -1,0 +1,208 @@
+.minigame-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.minigame-start-screen {
+  text-align: center;
+  max-width: 600px;
+  padding: 3rem;
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  border: 2px solid var(--primary-color);
+  box-shadow: var(--shadow-lg);
+  animation: scaleIn 0.5s ease-out;
+}
+
+.minigame-start-screen h1 {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.game-instructions {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.game-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.rule-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.rule-icon {
+  font-size: 2rem;
+}
+
+.start-game-button {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border: none;
+  padding: 1.5rem 3rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow);
+}
+
+.start-game-button:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: var(--shadow-lg);
+  animation: glow 1s ease-in-out infinite;
+}
+
+.start-game-button:active {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.minigame-hud {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2rem;
+  background: rgba(15, 23, 42, 0.9);
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  border: 2px solid var(--primary-color);
+  box-shadow: var(--shadow-lg);
+  z-index: 10;
+}
+
+.hud-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100px;
+}
+
+.hud-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.hud-value {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.score-value {
+  color: var(--primary-light);
+}
+
+.time-value {
+  color: var(--warning-color);
+}
+
+.combo-value {
+  color: var(--success-color);
+}
+
+.minigame-canvas {
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  display: block;
+}
+
+.end-game-button {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--danger-color);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow);
+  z-index: 10;
+}
+
+.end-game-button:hover {
+  background: #dc2626;
+  transform: translateX(-50%) translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.end-game-button:active {
+  transform: translateX(-50%) translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .minigame-start-screen {
+    padding: 2rem;
+    max-width: 90%;
+  }
+
+  .minigame-start-screen h1 {
+    font-size: 2rem;
+  }
+
+  .game-instructions {
+    font-size: 1rem;
+  }
+
+  .start-game-button {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+  }
+
+  .minigame-hud {
+    flex-direction: row;
+    gap: 1rem;
+    padding: 1rem;
+    top: 1rem;
+  }
+
+  .hud-item {
+    min-width: 80px;
+  }
+
+  .hud-value {
+    font-size: 1.5rem;
+  }
+
+  .end-game-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+}
