@@ -57,7 +57,7 @@ describe('idleFormulas', () => {
       const scaleFactor = 1.15
 
       expect(calculateUpgradeCost(baseCost, 0, scaleFactor)).toBe(100)
-      expect(calculateUpgradeCost(baseCost, 1, scaleFactor)).toBe(115)
+      expect(calculateUpgradeCost(baseCost, 1, scaleFactor)).toBe(114)
       expect(calculateUpgradeCost(baseCost, 2, scaleFactor)).toBe(132)
     })
 

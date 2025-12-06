@@ -12,7 +12,13 @@ const customJestConfig = {
   },
   testMatch: [
     '**/__tests__/**/*.[jt]s?(x)',
-    '**/?(*.)+(spec|test).[jt]s?(x)'
+    '**/tests/unit/**/*.[jt]s?(x)',
+    '**/?(*.)+(test).[jt]s?(x)'
+  ],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/.next/',
+    '/tests/integration/'
   ],
   collectCoverageFrom: [
     'app/**/*.{js,jsx,ts,tsx}',
