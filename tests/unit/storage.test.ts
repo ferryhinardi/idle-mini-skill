@@ -1,9 +1,24 @@
 import { saveGameState, loadGameState, clearGameState, getInitialGameState } from '@/lib/storage'
 import { GameState } from '@/lib/types'
 
+// Mock localStorage before imports
+const mockGetItem = jest.fn()
+const mockSetItem = jest.fn()
+const mockRemoveItem = jest.fn()
+const mockClear = jest.fn()
+
+Object.defineProperty(global, 'localStorage', {
+  value: {
+    getItem: mockGetItem,
+    setItem: mockSetItem,
+    removeItem: mockRemoveItem,
+    clear: mockClear,
+  },
+  writable: true,
+})
+
 describe('storage', () => {
   beforeEach(() => {
-    localStorage.clear()
     jest.clearAllMocks()
   })
 
@@ -24,7 +39,7 @@ describe('storage', () => {
 
       saveGameState(state)
 
-      expect(localStorage.setItem).toHaveBeenCalledWith(
+      expect(mockSetItem).toHaveBeenCalledWith(
         'idle-mini-skill-game-state',
         expect.any(String)
       )
@@ -37,7 +52,7 @@ describe('storage', () => {
       state.resources = 1000
       
       const serialized = JSON.stringify(state)
-      ;(localStorage.getItem as jest.Mock).mockReturnValue(serialized)
+      mockGetItem.mockReturnValue(serialized)
 
       const loaded = loadGameState()
       expect(loaded).not.toBeNull()
@@ -45,14 +60,14 @@ describe('storage', () => {
     })
 
     it('should return null when no saved state exists', () => {
-      ;(localStorage.getItem as jest.Mock).mockReturnValue(null)
+      mockGetItem.mockReturnValue(null)
 
       const loaded = loadGameState()
       expect(loaded).toBeNull()
     })
 
     it('should return null when localStorage throws error', () => {
-      ;(localStorage.getItem as jest.Mock).mockImplementation(() => {
+      mockGetItem.mockImplementation(() => {
         throw new Error('Storage error')
       })
 
@@ -64,7 +79,7 @@ describe('storage', () => {
   describe('clearGameState', () => {
     it('should clear game state from localStorage', () => {
       clearGameState()
-      expect(localStorage.removeItem).toHaveBeenCalledWith('idle-mini-skill-game-state')
+      expect(mockRemoveItem).toHaveBeenCalledWith('idle-mini-skill-game-state')
     })
   })
 })
