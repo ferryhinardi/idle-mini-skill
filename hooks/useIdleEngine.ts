@@ -9,34 +9,43 @@ import {
 import { GAME_CONFIG } from '@/lib/types'
 
 export function useIdleEngine() {
-  const [gameState, setGameState] = useState<GameState>(getInitialGameState())
-  const [resourcesPerSecond, setResourcesPerSecond] = useState(0)
-  const saveIntervalRef = useRef<NodeJS.Timeout | null>(null)
-  const tickIntervalRef = useRef<NodeJS.Timeout | null>(null)
-
-  // Initialize game state from storage
-  useEffect(() => {
+  const [isInitialized, setIsInitialized] = useState(false)
+  const [gameState, setGameState] = useState<GameState>(() => {
+    // Initialize state synchronously during first render
     const savedState = loadGameState()
     if (savedState) {
-      // Calculate offline gains
       const currentTime = Date.now()
-      const rps = calculateCurrentResourceRate(savedState)
+      // Calculate resource rate for offline gains
+      const baseRate = GAME_CONFIG.baseResourceRate + savedState.upgrades.generatorLevel
+      const upgradeMultiplier = 1 + savedState.upgrades.multiplierLevel * 0.1
+      const activeBoosts = savedState.boosts.filter(
+        (boost) => !isBoostExpired(boost.startTime, boost.duration, currentTime)
+      )
+      const boostMultiplier = activeBoosts.reduce((total, boost) => total * boost.multiplier, 1)
+      const rps = calculateResourceRate({ baseRate, upgradeMultiplier, boostMultiplier })
+      
       const offlineGains = calculateOfflineGains(
         savedState.lastTimestamp,
         currentTime,
         rps
       )
 
-      setGameState({
+      return {
         ...savedState,
         resources: savedState.resources + offlineGains,
         lastTimestamp: currentTime,
-        // Clean expired boosts
-        boosts: savedState.boosts.filter(
-          (boost) => !isBoostExpired(boost.startTime, boost.duration, currentTime)
-        ),
-      })
+        boosts: activeBoosts,
+      }
     }
+    return getInitialGameState()
+  })
+  const [resourcesPerSecond, setResourcesPerSecond] = useState(0)
+  const saveIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const tickIntervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Mark as initialized after first render
+  useEffect(() => {
+    setIsInitialized(true)
   }, [])
 
   // Calculate current resource rate based on upgrades and boosts

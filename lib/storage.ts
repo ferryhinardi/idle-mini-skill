@@ -6,6 +6,11 @@ import { GameState, STORAGE_KEY } from './types'
 
 export function saveGameState(state: GameState): void {
   try {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return
+    }
+    
     const serialized = JSON.stringify(state)
     localStorage.setItem(STORAGE_KEY, serialized)
   } catch (error) {
@@ -15,6 +20,11 @@ export function saveGameState(state: GameState): void {
 
 export function loadGameState(): GameState | null {
   try {
+    // Check if we're in a browser environment
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      return null
+    }
+    
     const serialized = localStorage.getItem(STORAGE_KEY)
     if (!serialized) return null
     
